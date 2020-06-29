@@ -7,13 +7,14 @@ class LoginService {
 
 async loginUsers(req) {
     let resultJson
-    let client =  await this.DBRepository.executeQuery("select * from TB_M_Users where username='"+req.username+"' and password ='"+req.password+"'");
+    let client =  await this.DBRepository.executeQuery("select username,role_id from TB_M_Users where username='"+req.username+"' and password ='"+req.password+"'");
     if (client.length != 0) {
             if (client[0].password == req.password) {
                 resultJson = {
                     "code": '200',
                     "msg": 'success',
-                    "user":client[0].username
+                    "user":client[0].username,
+                    "role":client[0].role_id
                 }
             } else {
                 resultJson = {
