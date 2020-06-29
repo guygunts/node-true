@@ -3,12 +3,13 @@ const router = express.Router();
 const licenselicense = require('../src/controller/licensecontroller');
 const login =require('../src/controller/LoginController')
 const adjustspeed =require('../src/controller/adjustspeedController')
+
 router.post('/adjustspeed',adjustspeed.adjustspeed)
 router.post('/uploadadjustspeed',adjustspeed.uploadadjustspeed)
 router.post('/login',login.loginUser)
 router.post('/updatelicense',verifyToken,licenselicense.updatelicense)
 router.get('/license',licenselicense.license)
-
+router.get('/menu',login.menuauth)
 router.post('/generatelicense',getlicense)
 
 function getlicense(req,res){
