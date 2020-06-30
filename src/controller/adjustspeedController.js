@@ -8,13 +8,22 @@ class adjustspeedController {
     }
 
     async uploadadjustspeed(req, res) {
+
+			let result=[]
         for(let [key,value] of Object.entries(req.body)){
             const ret = await adjustspeedService.AdjustSpeedService(value, res);
-            console.log(ret)
+			if(ret.code == 200){
+				value={...value,'status':"success"}
+			}else{
+				value={...value,'status':ret.error}
+			}
+			result.push(value)
         }
-        // log.info("request Data:",req.body)
-        // const ret = await adjustspeedService.AdjustSpeedService(req.body, res);
-        // res.json(ret);
+        let data={
+				"result":result
+			}
+		console.log(data)
+         res.json(data);
         res.end();
     }
 }

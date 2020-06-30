@@ -11,12 +11,24 @@ class licenseController {
             ret={...ret,'tps':authData}
 
         })
+        if(ret.status==0){
+            ret.status=false
+        }else{
+            ret.status=true
+        }
+           
        res.json(ret)
         res.end();
     }
 
     async updatelicense(req,res){
         const update = await licenseService.updatelicense(req.body)
+        res.json(update)
+        res.end();
+    }
+
+    async updatestastus(req,res){
+        const update = await licenseService.updatestastus(req.body)
         res.json(update)
         res.end();
     }

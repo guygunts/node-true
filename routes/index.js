@@ -11,7 +11,7 @@ router.post('/updatelicense',verifyToken,licenselicense.updatelicense)
 router.get('/license',licenselicense.license)
 router.get('/menu',login.menuauth)
 router.post('/generatelicense',getlicense)
-
+router.post('/updatestastus',licenselicense.updatestastus)
 function getlicense(req,res){
     const token = jwt.sign( req.body.token, 'HS512');
     let data ={
