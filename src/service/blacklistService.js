@@ -26,7 +26,7 @@ class BlacklistService {
     async BlacklistaddService(req,res) {
         let resultJson
         let data =await this.DBRepository.executeQuery(` select msisdn from TBL_M_BlackList where msisdn =${req.msisdn}`)
-        if(data[0] !== 0){
+        if(data.length !== 0){
             resultJson = {
                 "code":"500",
                 "mess": 'duplicate number'
@@ -54,9 +54,38 @@ class BlacklistService {
 
     async BlacklistlistService(req) {
         let resultJson
-        await this.DBRepository.executeQuery(`select file,start,end,status,create_by,result_file from TBL_M_Batch_Blacklist`);
-        resultJson = {
-            "mess": 'success'
+        let data=await this.DBRepository.executeQuery(`select file,DATE_FORMAT(start, "%Y-%m-%d %T") start,DATE_FORMAT(end, "%Y-%m-%d %T") end,status,DATE_FORMAT(create_by, "%Y-%m-%d %T") as create_by,result_file from TBL_M_Batch_Blacklist`);
+         resultJson = {
+            "code": '200',
+            "mess":'success',
+            "column": [{ "field": 'file', "header": 'File' }, { "field": 'start', "header": 'Start Date' }, { "field": 'end', "header": 'End Date' },{ "field": 'status', "header": 'Status' },{ "field": 'create_by', "header": 'Create By' }],
+            "data": data
+        }
+        return resultJson
+    }
+
+    async BlacklistfileService(req) {
+        let rec = req.time.split(" ")
+        let datetime=rec[0].split("/")
+
+        for(let i=0; i< 2; i++){
+                for(let e=1; e<=9; e++){ 
+                    if(datetime[i]==e){ 
+                        let datanew="0"
+                        datanew+=datetime[i]
+                        datetime[i]=datanew
+                        continue
+                    }
+                }
+        }
+        let newdate=datetime[2]+'-'+datetime[1]+'-'+datetime[0]+' '+rec[1]
+        let resultJson
+        await this.DBRepository.executeQuery(`INSERT INTO TBL_M_Batch_Blacklist (file,start,create_dt,create_by,status)
+        VALUES('${req.filename}','${newdate}',CURRENT_TIMESTAMP,'${req.user}','new')`);
+
+         resultJson = {
+            "code": '200',
+            "mess":'success'
         }
         return resultJson
     }

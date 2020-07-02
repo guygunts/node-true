@@ -15,6 +15,8 @@ router.post('/updatestastus',licenselicense.updatestastus)
 router.post('/blacklist',blacklist.BlacklistController)
 router.post('/blacklistadd',blacklist.BlacklistaddController)
 router.post('/blacklistdelete',blacklist.BlacklistdeleteController)
+router.post('/Blacklistlist',blacklist.BlacklistlistController)
+router.post('/Blacklistfile',blacklist.BlacklistfileController)
 function getlicense(req,res){
     const token = jwt.sign( req.body.token, 'HS512');
     let data ={
