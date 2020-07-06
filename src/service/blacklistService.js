@@ -54,7 +54,7 @@ class BlacklistService {
 
     async BlacklistlistService(req) {
         let resultJson
-        let data=await this.DBRepository.executeQuery(`select file,DATE_FORMAT(start, "%Y-%m-%d %T") start,DATE_FORMAT(end, "%Y-%m-%d %T") end,status,DATE_FORMAT(create_by, "%Y-%m-%d %T") as create_by,result_file from TBL_M_Batch_Blacklist`);
+        let data=await this.DBRepository.executeQuery(`select file,DATE_FORMAT(start, "%Y-%m-%d %T") start,DATE_FORMAT(end, "%Y-%m-%d %T") end,status,create_by,result_file from TBL_M_Batch_Blacklist`);
          resultJson = {
             "code": '200',
             "mess":'success',

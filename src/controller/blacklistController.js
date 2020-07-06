@@ -1,4 +1,5 @@
 const blacklistService =require('../service/blacklistService');
+const pathdev=require('dotenv').config({ path: './config/dev.env' });
 class BlacklistController {
   async BlacklistController(req, res) {
 
@@ -26,6 +27,11 @@ class BlacklistController {
   async BlacklistlistController(req, res) {
 
     const ret = await blacklistService.BlacklistlistService(req.body);
+    let path = require("path");
+    for(let i=0; i<ret.data.length; i++){ 
+        let file = path.basename(ret.data[i].file);
+        ret.data[i].file=file
+    }
     // res.status(ret.code).send(ret.mess)
       res.json(ret);
       res.end();
@@ -47,10 +53,14 @@ class BlacklistController {
    
     var filessystem = require('fs');
     
-    var dir = './upload/';
+    var dir = `${pathdev.parsed.paths_file}//upload//`;
+    var dir1 = `${pathdev.parsed.paths_file}//result//`;
     console.log(`Current directory: ${process.cwd()}`);
     if (!filessystem.existsSync(dir)) {
         filessystem.mkdirSync(dir);
+    }
+    if (!filessystem.existsSync(dir1)) {
+        filessystem.mkdirSync(dir1);
     }
      upload(req, res, function (err) {
         if (err instanceof multer.MulterError) {
@@ -66,10 +76,10 @@ class BlacklistController {
        
 
         const excelToJson = require('convert-excel-to-json');
-        var path = require('path');
-        var filePath = path.resolve('./' + '//upload//' + req.files[0].filename);
+        // var path = require('path');
+        // var filePath = path.resolve(`${pathdev.parsed.paths_file}//upload//${req.files[0].filename}`);
         let data={
-            "filename":filePath,
+            "filename":`${pathdev.parsed.paths_file}//upload//${req.files[0].filename}`,
             "time":req.body.time,
             "user":req.body.user
         }
@@ -79,6 +89,17 @@ class BlacklistController {
 
     })
   }
+
+  async BlacklistdownloadController(req, res) {
+    let path = require('path');
+     const file = path.resolve(__dirname, `../../result/${req.body.file}`);
+    // const file = path.resolve(__dirname, `../../upload/answer_social.csv-1593745823314`);
+    res.setHeader("Content-Type", "text/csv;charset=utf-8");
+    res.download(file); 
+  }
+
+
+
 }
 const blacklistController = new BlacklistController();
 module.exports= blacklistController;
