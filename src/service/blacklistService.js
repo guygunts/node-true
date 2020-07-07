@@ -13,11 +13,11 @@ class BlacklistService {
             sql += ` and msisdn =${req.msisdn}`
         }
 
-        let client = await this.DBRepository.executeQuery(`select msisdn,DATE_FORMAT(created_at, "%Y-%m-%d %T") as created_at,DATE_FORMAT(updated_at, "%Y-%m-%d %T") as updated_at from TBL_M_BlackList ${sql}`);
+        let client = await this.DBRepository.executeQuery(`select msisdn,DATE_FORMAT(created_dt, "%Y-%m-%d %T") as created_dt,created_by from TBL_M_BlackList ${sql}`);
 
         resultJson = {
             "code": '200',
-            "column": [{ "field": 'msisdn', "header": 'MSISDN' }, { "field": 'created_at', "header": 'Created By' }, { "field": 'updated_at', "header": 'Update By' }],
+            "column": [{ "field": 'msisdn', "header": 'MSISDN' }, { "field": 'created_dt', "header": 'Created Date' }, { "field": 'created_by', "header": 'Created By' }],
             "data": client
         }
         return resultJson
@@ -33,7 +33,7 @@ class BlacklistService {
             }
             return resultJson
         }else{
-            await this.DBRepository.executeQuery(`INSERT INTO TBL_M_BlackList (msisdn,created_at,created_by)
+            await this.DBRepository.executeQuery(`INSERT INTO TBL_M_BlackList (msisdn,created_dt,created_by)
     VALUES(${req.msisdn},CURRENT_TIMESTAMP,'${req.user}');`);
         }
         
@@ -68,7 +68,7 @@ class BlacklistService {
         let rec = req.time.split(" ")
         let datetime=rec[0].split("/")
 
-        for(let i=0; i< 2; i++){
+        for(let i=1; i<=2; i++){
                 for(let e=1; e<=9; e++){ 
                     if(datetime[i]==e){ 
                         let datanew="0"
@@ -78,7 +78,7 @@ class BlacklistService {
                     }
                 }
         }
-        let newdate=datetime[2]+'-'+datetime[1]+'-'+datetime[0]+' '+rec[1]
+        let newdate=datetime[0]+'-'+datetime[1]+'-'+datetime[2]+' '+rec[1]
         let resultJson
         await this.DBRepository.executeQuery(`INSERT INTO TBL_M_Batch_Blacklist (file,start,create_dt,create_by,status)
         VALUES('${req.filename}','${newdate}',CURRENT_TIMESTAMP,'${req.user}','new')`);

@@ -27,11 +27,6 @@ class BlacklistController {
   async BlacklistlistController(req, res) {
 
     const ret = await blacklistService.BlacklistlistService(req.body);
-    let path = require("path");
-    for(let i=0; i<ret.data.length; i++){ 
-        let file = path.basename(ret.data[i].file);
-        ret.data[i].file=file
-    }
     // res.status(ret.code).send(ret.mess)
       res.json(ret);
       res.end();
@@ -79,7 +74,7 @@ class BlacklistController {
         // var path = require('path');
         // var filePath = path.resolve(`${pathdev.parsed.paths_file}//upload//${req.files[0].filename}`);
         let data={
-            "filename":`${pathdev.parsed.paths_file}//upload//${req.files[0].filename}`,
+            "filename":`${req.files[0].filename}`,
             "time":req.body.time,
             "user":req.body.user
         }
