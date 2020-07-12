@@ -54,7 +54,7 @@ class BlacklistService {
 
     async BlacklistlistService(req) {
         let resultJson
-        let data=await this.DBRepository.executeQuery(`select file,DATE_FORMAT(start, "%Y-%m-%d %T") start,DATE_FORMAT(end, "%Y-%m-%d %T") end,status,create_by,result_file from TBL_M_Batch_Blacklist`);
+        let data=await this.DBRepository.executeQuery(`select id,file,DATE_FORMAT(start, "%Y-%m-%d %T") start,DATE_FORMAT(end, "%Y-%m-%d %T") end,status,create_by,result_file from TBL_M_Batch_Blacklist`);
          resultJson = {
             "code": '200',
             "mess":'success',
@@ -63,6 +63,23 @@ class BlacklistService {
         }
         return resultJson
     }
+
+    async BlacklistlistdeleteService(req) {
+        let resultJson
+        if(req.length){ 
+            for(let i=0; i<req.length; i++){ 
+                await this.DBRepository.executeQuery(`delete  from TBL_M_Batch_Blacklist where id=${req[i].id};`);
+            }
+        }else{
+            await this.DBRepository.executeQuery(`delete  from TBL_M_Batch_Blacklist where id=${req.id};`);
+        }
+        
+        resultJson = {
+            "mess": 'success'
+        }
+        return resultJson
+    }
+
 
     async BlacklistfileService(req) {
         let rec = req.time.split(" ")

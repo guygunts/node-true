@@ -31,6 +31,14 @@ class BlacklistController {
       res.json(ret);
       res.end();
   }
+  
+  async BlacklistlistdeleteController(req, res) {
+
+    const ret = await blacklistService.BlacklistlistdeleteService(req.body);
+    // res.status(ret.code).send(ret.mess)
+      res.json(ret);
+      res.end();
+  }
 
   async BlacklistfileController(req, res) {
     var multer = require('multer')
