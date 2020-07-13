@@ -7,6 +7,8 @@ const blacklist =require('../src/controller/blacklistController')
 router.post('/adjustspeed',adjustspeed.adjustspeed)
 router.post('/uploadadjustspeed',adjustspeed.uploadadjustspeed)
 router.post('/login',login.loginUser)
+router.post('/auth',login.authuser)
+
 router.post('/updatelicense',verifyToken,licenselicense.updatelicense)
 router.get('/license',licenselicense.license)
 router.get('/menu',login.menuauth)

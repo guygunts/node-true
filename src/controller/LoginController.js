@@ -13,6 +13,13 @@ class LoginController {
       res.json(ret);
       res.end();
   }
+
+  async authuser(req, res) {
+    // log.info("request Data:",req.body)
+    const ret = await loginService.authuser(req.body);
+      res.json(ret);
+      res.end();
+  }
 }
 const loginController = new LoginController();
 module.exports= loginController;
