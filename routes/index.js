@@ -4,6 +4,7 @@ const licenselicense = require('../src/controller/licensecontroller');
 const login =require('../src/controller/LoginController')
 const adjustspeed =require('../src/controller/adjustspeedController')
 const blacklist =require('../src/controller/blacklistController')
+const planoffer =require('../src/controller/planofferController')
 router.post('/adjustspeed',adjustspeed.adjustspeed)
 router.post('/uploadadjustspeed',adjustspeed.uploadadjustspeed)
 router.post('/login',login.loginUser)
@@ -21,6 +22,15 @@ router.post('/Blacklistlist',blacklist.BlacklistlistController)
 router.post('/Blacklistfile',blacklist.BlacklistfileController)
 router.post('/Blacklistfiledelete',blacklist.BlacklistlistdeleteController)
 router.post('/Blacklistdownload',blacklist.BlacklistdownloadController)
+
+
+
+router.post('/planofferlist',planoffer.Offerlist)
+router.post('/planofferinsert',planoffer.offerinsert)
+router.post('/planofferdelete',planoffer.offerdelete)
+router.post('/planofferedit',planoffer.offeredit)
+
+
 function getlicense(req,res){
     const token = jwt.sign( req.body.token, 'HS512');
     let data ={
