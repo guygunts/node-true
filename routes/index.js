@@ -25,7 +25,7 @@ router.post('/Blacklistdownload',blacklist.BlacklistdownloadController)
 
 
 
-router.post('/planofferlist',planoffer.Offerlist)
+router.get('/planofferlist',planoffer.Offerlist)
 router.post('/planofferinsert',planoffer.offerinsert)
 router.post('/planofferdelete',planoffer.offerdelete)
 router.post('/planofferedit',planoffer.offeredit)

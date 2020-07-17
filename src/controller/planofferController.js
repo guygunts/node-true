@@ -2,7 +2,7 @@ const offerService = require('../service/planofferService');
 class OfferController {
     async Offerlist(req, res) {
 
-        const ret = await offerService.offerlist(req.body);
+        const ret = await offerService.offerlist();
         res.json(ret);
         res.end();
     }
