@@ -53,7 +53,11 @@ class Planoffer {
     }
 
     async offerdelete(req){ 
-        let data=await this.DBRepository.executeQuery(`delete from TB_M_Plan_Offers where id=${req.id}`);
+        if(req.length){ 
+            for(let i=0; i<req.length; i++){ 
+                await this.DBRepository.executeQuery(`delete from TB_M_Plan_Offers where id=${req[i].id}`);
+            }
+        }
         let resultJson = {
             "mess":'success'
         }
@@ -61,8 +65,22 @@ class Planoffer {
     }
 
     async offeredit(req){ 
-        await this.DBRepository.executeQuery(`UPDATE INTO TB_M_Plan_Offers (Payment_Type, offer_promoMessage, operatorBrandName, planName, planId, planDescription, promoMessage, languageCode, overusagePolicy, maxRateKbps, currencyCode, units, nanos, duration, offerContext, trafficCategories, connectionType, refreshPeriod, quotaBytes, quotaMinutes, expireTime, formOfPayment, update_dt, update_by) 
-        VALUES ('','','','','','','','','','','','','','','','','','','','','','',CURRENT_TIMESTAMP,'');`);  
+        let rec = req.expireTime.split(" ")
+        let datetime=rec[0].split("/")
+
+        for(let i=1; i<=2; i++){
+                for(let e=1; e<=9; e++){ 
+                    if(datetime[i]==e){ 
+                        let datanew="0"
+                        datanew+=datetime[i]
+                        datetime[i]=datanew
+                        continue
+                    }
+                }
+        }
+        let newdate=datetime[0]+'-'+datetime[1]+'-'+datetime[2]+' '+rec[1]
+        
+        await this.DBRepository.executeQuery(`UPDATE  TB_M_Plan_Offers set Payment_Type='${req.Payment_Type}', offer_promoMessage='${req.offer_promoMessage}', operatorBrandName='${req.operatorBrandName}', planName='${req.planName}', planId='${req.planId}', planDescription='${req.planDescription}', promoMessage='${req.promoMessage}', languageCode='${req.languageCode}', overusagePolicy='${req.overusagePolicy}', maxRateKbps='${req.maxRateKbps}', currencyCode='${req.currencyCode}', units='${req.units}', nanos='${req.nanos}', duration='${req.duration}', offerContext='${req.offerContext}', trafficCategories='${req.trafficCategories}', connectionType='${req.connectionType}', refreshPeriod='${req.refreshPeriod}', quotaBytes='${req.quotaBytes}', quotaMinutes='${req.quotaMinutes}', expireTime='${newdate}', formOfPayment='${req.formOfPayment}', update_dt=CURRENT_TIMESTAMP, update_by='${req.user}' where id=${req.id};`)
 
         let resultJson = {
             "mess":'success'
