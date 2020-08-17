@@ -5,10 +5,10 @@ class Planoffer {
     }
     async offerlist(){ 
         let columns=[]
-        let columnname="Payment_Type,offer_promoMessage,operatorBrandName,planName,planId,planDescription,promoMessage,languageCode,overusagePolicy,maxRateKbps,currencyCode,units,nanos,duration,offerContext,trafficCategories,connectionType,refreshPeriod,quotaBytes,quotaMinutes,expireTime,formOfPayment, create_dt,create_by,update_dt,update_by"
+        let columnname="Payment_Type,Company,promoMessage_th,promoMessage_en,planName_th,planName_en,planId,units,formOfPayment"
 
-        let columndata="Payment_Type,offer_promoMessage,operatorBrandName,planName,planId,planDescription,promoMessage,languageCode,overusagePolicy,maxRateKbps,currencyCode,units,nanos,duration,offerContext,trafficCategories,connectionType,refreshPeriod,quotaBytes,quotaMinutes,expireTime,formOfPayment,create_dt,create_by,update_dt,update_by"
-
+        let columndata="Payment_Type,Company,promoMessage_th,promoMessage_en,planName_th,planName_en,planId,units,formOfPayment"
+        let dropdown=await this.DBRepository.executeQuery(`select code label ,code value  from TB_M_Package`)
        let arraycolumnname=columnname.split(',')
        let arraycolumndata=columndata.split(',')
 
@@ -20,9 +20,10 @@ class Planoffer {
             columns.push(items)
         }
 
-        let data=await this.DBRepository.executeQuery(`select id,Payment_Type,offer_promoMessage,operatorBrandName,planName,planId,planDescription,promoMessage,languageCode,overusagePolicy,maxRateKbps, currencyCode,units,nanos,duration,offerContext,trafficCategories,connectionType,refreshPeriod,quotaBytes,quotaMinutes,DATE_FORMAT(expireTime, "%Y-%m-%d %T") expireTime ,formOfPayment,DATE_FORMAT(create_dt, "%Y-%m-%d %T") create_dt, create_by,DATE_FORMAT(update_dt, "%Y-%m-%d %T") update_dt,update_by from TB_M_Plan_Offers`);
+        let data=await this.DBRepository.executeQuery(`select Payment_Type,Company,promoMessage_th,promoMessage_en,planName_th,planName_en,planId,units,formOfPayment from TB_M_Plan_Offers`);
 
         let resultJson = {
+            "dropdown":dropdown,
             "columnname":columns,
             "data":data
         }
@@ -30,32 +31,38 @@ class Planoffer {
     }
 
     async offerinsert(req){ 
-        let rec = req.expireTime.split(" ")
-        let datetime=rec[0].split("/")
+        try{
+            let datainsert =await this.DBRepository.executeQuery(`select company,tss_description_th,tss_description_en,price from TB_M_Package where code='${req.planId}'`)
 
-        for(let i=1; i<=2; i++){
-                for(let e=1; e<=9; e++){ 
-                    if(datetime[i]==e){ 
-                        let datanew="0"
-                        datanew+=datetime[i]
-                        datetime[i]=datanew
-                        continue
-                    }
-                }
+            await this.DBRepository.executeQuery(`INSERT INTO TB_M_Plan_Offers (Payment_Type,company,promoMessage_th,promoMessage_en,planName_th,planName_en,planId,units,formOfPayment,create_dt,create_by) 
+            VALUES ('${req.Payment_Type}','${datainsert[0].company}','${req.promoMessage_th}','${req.promoMessage_en}','${datainsert[0].tss_description_th}',${datainsert[0].tss_description_en},'${req.planId}','${req.price}','${req.formOfPayment}',CURRENT_TIMESTAMP,'${req.user}');`);  
+            let resultJson = {
+                "mess":'success'
+            }
+            return resultJson
+        }catch(err){ 
+            return err
         }
-        let newdate=datetime[0]+'-'+datetime[1]+'-'+datetime[2]+' '+rec[1]
-        await this.DBRepository.executeQuery(`INSERT INTO TB_M_Plan_Offers (Payment_Type, offer_promoMessage, operatorBrandName, planName, planId, planDescription, promoMessage, languageCode, overusagePolicy, maxRateKbps, currencyCode, units, nanos, duration, offerContext, trafficCategories, connectionType, refreshPeriod, quotaBytes, quotaMinutes, expireTime, formOfPayment, create_dt, create_by) 
-        VALUES ('${req.Payment_Type}','${req.offer_promoMessage}','${req.operatorBrandName}','${req.planName}','${req.planId}','${req.planDescription}','${req.promoMessage}','${req.languageCode}','${req.overusagePolicy}','${req.maxRateKbps}','${req.currencyCode}','${req.units}','${req.nanos}','${req.duration}','${req.offerContext}','${req.trafficCategories}','${req.connectionType}','${req.refreshPeriod}','${req.quotaBytes}','${req.quotaMinutes}','${newdate}','${req.formOfPayment}',CURRENT_TIMESTAMP,'${req.user}');`);  
-        let resultJson = {
-            "mess":'success'
-        }
-        return resultJson
+        // let rec = req.expireTime.split(" ")
+        // let datetime=rec[0].split("/")
+
+        // for(let i=1; i<=2; i++){
+        //         for(let e=1; e<=9; e++){ 
+        //             if(datetime[i]==e){ 
+        //                 let datanew="0"
+        //                 datanew+=datetime[i]
+        //                 datetime[i]=datanew
+        //                 continue
+        //             }
+        //         }
+        // }
+       
     }
 
     async offerdelete(req){ 
         if(req.length){ 
             for(let i=0; i<req.length; i++){ 
-                await this.DBRepository.executeQuery(`delete from TB_M_Plan_Offers where id=${req[i].id}`);
+                await this.DBRepository.executeQuery(`delete from TB_M_Plan_Offers where planId='${req[i].planId}'`);
             }
         }
         let resultJson = {
@@ -65,22 +72,22 @@ class Planoffer {
     }
 
     async offeredit(req){ 
-        let rec = req.expireTime.split(" ")
-        let datetime=rec[0].split("/")
+        // let rec = req.expireTime.split(" ")
+        // let datetime=rec[0].split("/")
 
-        for(let i=1; i<=2; i++){
-                for(let e=1; e<=9; e++){ 
-                    if(datetime[i]==e){ 
-                        let datanew="0"
-                        datanew+=datetime[i]
-                        datetime[i]=datanew
-                        continue
-                    }
-                }
-        }
-        let newdate=datetime[0]+'-'+datetime[1]+'-'+datetime[2]+' '+rec[1]
+        // for(let i=1; i<=2; i++){
+        //         for(let e=1; e<=9; e++){ 
+        //             if(datetime[i]==e){ 
+        //                 let datanew="0"
+        //                 datanew+=datetime[i]
+        //                 datetime[i]=datanew
+        //                 continue
+        //             }
+        //         }
+        // }
+        // let newdate=datetime[0]+'-'+datetime[1]+'-'+datetime[2]+' '+rec[1]
         
-        await this.DBRepository.executeQuery(`UPDATE  TB_M_Plan_Offers set Payment_Type='${req.Payment_Type}', offer_promoMessage='${req.offer_promoMessage}', operatorBrandName='${req.operatorBrandName}', planName='${req.planName}', planId='${req.planId}', planDescription='${req.planDescription}', promoMessage='${req.promoMessage}', languageCode='${req.languageCode}', overusagePolicy='${req.overusagePolicy}', maxRateKbps='${req.maxRateKbps}', currencyCode='${req.currencyCode}', units='${req.units}', nanos='${req.nanos}', duration='${req.duration}', offerContext='${req.offerContext}', trafficCategories='${req.trafficCategories}', connectionType='${req.connectionType}', refreshPeriod='${req.refreshPeriod}', quotaBytes='${req.quotaBytes}', quotaMinutes='${req.quotaMinutes}', expireTime='${newdate}', formOfPayment='${req.formOfPayment}', update_dt=CURRENT_TIMESTAMP, update_by='${req.user}' where id=${req.id};`)
+        await this.DBRepository.executeQuery(`UPDATE  TB_M_Plan_Offers set Payment_Type='${req.Payment_Type}', promoMessage_th='${req.promoMessage_th}',promoMessage_en='${req.promoMessage_en}', formOfPayment='${req.formOfPayment}', update_dt=CURRENT_TIMESTAMP, update_by='${req.user}' where planId='${req.planId}'`)
 
         let resultJson = {
             "mess":'success'
