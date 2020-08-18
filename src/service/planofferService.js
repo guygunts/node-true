@@ -6,16 +6,22 @@ class Planoffer {
     async offerlist(){ 
         let columns=[]
         let columnname="Payment_Type,Company,promoMessage_th,promoMessage_en,planName_th,planName_en,planId,units,formOfPayment"
-
         let columndata="Payment_Type,Company,promoMessage_th,promoMessage_en,planName_th,planName_en,planId,units,formOfPayment"
         let dropdown=await this.DBRepository.executeQuery(`select code label ,code value  from TB_M_Package`)
        let arraycolumnname=columnname.split(',')
        let arraycolumndata=columndata.split(',')
-
+       let arraycolumnstyle=[]
+       for(let i=0; i<columnname.length; i++){ 
+            let datajson ={
+                width:'250px'
+            }
+            arraycolumnstyle.push(datajson)
+       }
         for (let e = 0; e < arraycolumnname.length; e++) {
             let items = {
                 'header':arraycolumnname[e],
-                'field': arraycolumndata[e]
+                'field': arraycolumndata[e],
+                'style':arraycolumnstyle[e]
             }
             columns.push(items)
         }

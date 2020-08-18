@@ -27,6 +27,34 @@ class OfferController {
         res.json(ret);
         res.end();
     }
+
+    async offerinsertfile(req, res) {
+        
+        const result=[]
+        for(let [key,value] of Object.entries(req.body)){
+            const ret = await offerService.offerinsert(value); 
+            let datajson
+                if(ret.mess == 'success'){
+                    datajson={
+                        'planId':value.planId,
+                        'status':"success"
+                    }
+                }else{
+                    datajson={
+                        'planId':value.planId,
+                        'status':ret.message
+                    }
+                }
+                result.push(datajson);
+
+        }  
+    let data={
+            "result":result
+        }
+    console.log(data)
+     res.json(data);
+        res.end();
+    }
 }
 const offerController = new OfferController();
 module.exports = offerController;
