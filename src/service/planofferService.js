@@ -38,10 +38,9 @@ class Planoffer {
 
     async offerinsert(req){ 
         try{
-            let datainsert =await this.DBRepository.executeQuery(`select company,tss_description_th,tss_description_en,price from TB_M_Package where code='${req.planId}'`)
-
+            let datainsert =await this.DBRepository.executeQuery(`select company,tss_description_th,tss_description_en,price from TB_M_Package where code='${req.planId.trim()}'`)
             await this.DBRepository.executeQuery(`INSERT INTO TB_M_Plan_Offers (Payment_Type,company,promoMessage_th,promoMessage_en,planName_th,planName_en,planId,units,formOfPayment,create_dt,create_by) 
-            VALUES ('${req.Payment_Type}','${datainsert[0].company}','${req.promoMessage_th}','${req.promoMessage_en}','${datainsert[0].tss_description_th}',${datainsert[0].tss_description_en},'${req.planId}','${req.price}','${req.formOfPayment}',CURRENT_TIMESTAMP,'${req.user}');`);  
+            VALUES ('${req.Payment_Type}','${datainsert[0].company}','${req.promoMessage_th}','${req.promoMessage_en}','${datainsert[0].tss_description_th}','${datainsert[0].tss_description_en}','${req.planId}','${datainsert[0].price}','${req.formOfPayment}',CURRENT_TIMESTAMP,'${req.user}')`);  
             let resultJson = {
                 "mess":'success'
             }
