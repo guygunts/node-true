@@ -26,12 +26,13 @@ router.post('/Blacklistfiledelete',blacklist.BlacklistlistdeleteController)
 router.post('/Blacklistdownload',blacklist.BlacklistdownloadController)
 
 
-
+router.post('/planofferdropdown',planoffer.offerdropdown)
 router.get('/planofferlist',planoffer.Offerlist)
 router.post('/planofferinsert',planoffer.offerinsert)
 router.post('/planofferdelete',planoffer.offerdelete)
 router.post('/planofferedit',planoffer.offeredit)
 router.post('/offerinsertfile',planoffer.offerinsertfile)
+
 
 router.get('/getuser',user.getdatauser)
 router.get('/userlist',user.Userlist)

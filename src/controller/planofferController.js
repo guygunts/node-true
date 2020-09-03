@@ -1,5 +1,13 @@
 const offerService = require('../service/planofferService');
 class OfferController {
+
+    async offerdropdown(req, res) {
+
+        const ret = await offerService.offerdropdown(req.body);
+        res.json(ret);
+        res.end();
+    }
+
     async Offerlist(req, res) {
 
         const ret = await offerService.offerlist();
