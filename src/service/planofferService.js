@@ -98,7 +98,7 @@ class Planoffer {
       let no=  await this.DBRepository.executeQuery(`SELECT number_id FROM TB_M_Plan_Offers ORDER BY number_id DESC LIMIT 1`)
 
             await this.DBRepository.executeQuery(`INSERT INTO TB_M_Plan_Offers (number_id,Payment_Type,company,promoMessage_th,promoMessage_en,planName_th,planName_en,planId,units,formOfPayment,create_dt,create_by) 
-            VALUES ('${no+1}','${req.Payment_Type}','${datainsert[0].company}','${promoMessage_th}','${promoMessage_en}','${planName_th}','${planName_en}','${req.planId}','${datainsert[0].price}','${req.formOfPayment}',CURRENT_TIMESTAMP,'${req.user}')`);  
+            VALUES ('${no[0].number_id+1}','${req.Payment_Type}','${datainsert[0].company}','${promoMessage_th}','${promoMessage_en}','${planName_th}','${planName_en}','${req.planId}','${datainsert[0].price}','${req.formOfPayment}',CURRENT_TIMESTAMP,'${req.user}')`);  
             let resultJson = {
                 "mess":'success'
             }
@@ -123,11 +123,19 @@ class Planoffer {
     }
 
     async offerdelete(req){ 
-        if(req.length){ 
-            for(let i=0; i<req.length; i++){ 
-                await this.DBRepository.executeQuery(`delete from TB_M_Plan_Offers where planId='${req[i].planId}'`);
-            }
-        }
+
+        let no=  await this.DBRepository.executeQuery(`SELECT number_id FROM TB_M_Plan_Offers ORDER BY number_id DESC LIMIT 1`)
+
+        const betweennumber= await this.DBRepository.executeQuery(`select  number_id from TB_M_Plan_Offers where number_id  between ${req.number_id} and ${no[0].number_id}`)
+
+            for(let i=0; i<betweennumber.length; i++){              
+                console.log(betweennumber[i])  
+                if(i==0){
+                    await this.DBRepository.executeQuery(`delete from TB_M_Plan_Offers where Plan_offers_id='${req.Plan_offers_id}'`);
+                    continue
+                }
+                await this.DBRepository.executeQuery(`UPDATE TB_M_Plan_Offers SET number_id =${betweennumber[i].number_id-1} WHERE number_id ='${betweennumber[i].number_id}'`)
+        }         
         let resultJson = {
             "mess":'success'
         }
@@ -175,7 +183,7 @@ class Planoffer {
         let datanumberbetweenone
 
         let datanumberbetweentwo
-        await this.DBRepository.executeQuery(`UPDATE  TB_M_Plan_Offers set Payment_Type=${req.Payment_Type}, promoMessage_th='${promoMessage_th}',promoMessage_en='${promoMessage_en}', formOfPayment='${req.formOfPayment}', update_dt=CURRENT_TIMESTAMP, update_by='${req.user}',planId='${req.planId}' where number_id='${pknumber[0].number_id}'`)
+        await this.DBRepository.executeQuery(`UPDATE  TB_M_Plan_Offers set Payment_Type=${req.Payment_Type}, promoMessage_th='${promoMessage_th}',promoMessage_en='${promoMessage_en}', formOfPayment='${req.formOfPayment}', update_dt=CURRENT_TIMESTAMP, update_by='${req.user}',planId='${req.planId}' where Plan_offers_id='${req.id}'`)
         if(pknumber[0].number_id > req.number_id){ 
             datanumberbetweenone=req.number_id
             datanumberbetweentwo=pknumber[0].number_id
