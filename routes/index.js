@@ -7,6 +7,8 @@ const blacklist =require('../src/controller/blacklistController')
 const planoffer =require('../src/controller/planofferController')
 const user =require('../src/controller/userController')
 const maxrate=require('../src/controller/maxrateController')
+const errorcode=require('../src/controller/errorcodeController')
+const notifymapping=require('../src/controller/notifymappingController')
 router.post('/adjustspeed',adjustspeed.adjustspeed)
 router.post('/uploadadjustspeed',adjustspeed.uploadadjustspeed)
 router.post('/login',login.loginUser)
@@ -45,6 +47,18 @@ router.get('/maxratelist',maxrate.Maxratelist)
 router.post('/maxrateedit',maxrate.Maxrateedit)
 router.post('/maxrateinsert',maxrate.Maxrateinsert)
 router.post('/maxratedelete',maxrate.Maxratedelete)
+ 
+router.get('/geterrorcode',errorcode.getdataErrorcode)
+router.get('/errorcodelist',errorcode.Errorcodelist)
+router.post('/errorcodeedit',errorcode.Errorcodeedit)
+router.post('/errorcodeinsert',errorcode.Errorcodeinsert)
+router.post('/errorcodedelete',errorcode.Errorcodedelete)
+
+router.get('/getnotifymapping',notifymapping.getdataNotifymapping)
+router.get('/notifymappinglist',notifymapping.Notifymappinglist)
+router.post('/notifymappingedit',notifymapping.Notifymappingedit)
+router.post('/notifymappinginsert',notifymapping.Notifymappinginsert)
+router.post('/notifymappingdelete',notifymapping.Notifymappingdelete)
 
 function getlicense(req,res){
     const token = jwt.sign( req.body.token, 'HS512');
