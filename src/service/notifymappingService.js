@@ -16,14 +16,23 @@ class Notifymapping {
         let columns=[]
         let columnname="Event_id,moduleName_en,moduleName_th,trafficCategories,overUsagePolicy,description_en,description_th,coarseBalanceLevel,title_en,title_th,cus_type"
         let columndata="Event_id,moduleName_en,moduleName_th,trafficCategories,overUsagePolicy,description_en,description_th,coarseBalanceLevel,title_en,title_th,cus_type"
-
+        let arraycolumnstyle=[]
        let arraycolumnname=columnname.split(',')
        let arraycolumndata=columndata.split(',')
-
+       for(let i=0; i<columnname.length; i++){ 
+        let datajson
+            
+            datajson ={
+                width:'250px'
+            }
+        
+        arraycolumnstyle.push(datajson)
+   }
         for (let e = 0; e < arraycolumnname.length; e++) {
             let items = {
                 'header':arraycolumnname[e],
-                'field': arraycolumndata[e]
+                'field': arraycolumndata[e],
+                'style':arraycolumnstyle[e]
             }
             columns.push(items)
         }
@@ -38,8 +47,90 @@ class Notifymapping {
     }
 
     async Notifymappinginsert (req){
+
+        let moduleName_en
+        if(req.moduleName_en != null){ 
+            moduleName_en=req.error_message_th.trim()
+            
+        }else{
+            moduleName_en=''
+        }
+
+        let moduleName_th
+        if(req.moduleName_th != null){ 
+            moduleName_th=req.error_message_th.trim()
+            
+        }else{
+            moduleName_th=''
+        }
+
+        let trafficCategories
+        if(req.trafficCategories != null){ 
+            trafficCategories=req.error_message_th.trim()
+            
+        }else{
+            trafficCategories=''
+        }
+
+        let overUsagePolicy
+        if(req.overUsagePolicy != null){ 
+            overUsagePolicy=req.error_message_th.trim()
+            
+        }else{
+            overUsagePolicy=''
+        }
+
+        let description_en
+        if(req.description_en != null){ 
+            description_en=req.error_message_th.trim()
+            
+        }else{
+            description_en=''
+        }
+
+        let description_th
+        if(req.description_th != null){ 
+            description_th=req.error_message_th.trim()
+            
+        }else{
+            description_th=''
+        }
+
+        let coarseBalanceLevel
+        if(req.coarseBalanceLevel != null){ 
+            coarseBalanceLevel=req.error_message_th.trim()
+            
+        }else{
+            coarseBalanceLevel=''
+        }
+
+        let title_en
+        if(req.title_en != null){ 
+            title_en=req.error_message_th.trim()
+            
+        }else{
+            title_en=''
+        }
+
+        let title_th
+        if(req.title_th != null){ 
+            title_th=req.error_message_th.trim()
+            
+        }else{
+            title_th=''
+        }
+
         await this.DBRepository.executeQuery(`INSERT INTO TB_M_Push_Notify_Mapping (Event_id,moduleName_en,moduleName_th,trafficCategories,overUsagePolicy,description_en,description_th,coarseBalanceLevel,title_en,title_th,cus_type,create_dt,create_by) 
-        VALUES ('${req.Event_id}','${req.moduleName_en}','${req.moduleName_th}','${req.trafficCategories}','${req.overUsagePolicy}','${req.description_en}','${req.description_th}','${req.coarseBalanceLevel}','${req.title_en}','${req.title_th}','${req.cus_type}',CURRENT_TIMESTAMP,'${req.user}');`);  
+        VALUES ('${req.Event_id.trim()}',
+        '${moduleName_en}',
+        '${moduleName_th}',
+        '${trafficCategories}',
+        '${overUsagePolicy}',
+        '${description_en}',
+        '${description_th}',
+        '${coarseBalanceLevel}',
+        '${title_en}',
+        '${title_th}','${req.cus_type}',CURRENT_TIMESTAMP,'${req.user}');`);  
         let resultJson = {
             "mess":'success'
         }
@@ -47,17 +138,88 @@ class Notifymapping {
     }
 
     async Notifymappingupdate(req){
+        let moduleName_en
+        if(req.moduleName_en != null){ 
+            moduleName_en=req.moduleName_en.trim()
+            
+        }else{
+            moduleName_en=''
+        }
+
+        let moduleName_th
+        if(req.moduleName_th != null){ 
+            moduleName_th=req.moduleName_th.trim()
+            
+        }else{
+            moduleName_th=''
+        }
+
+        let trafficCategories
+        if(req.trafficCategories != null){ 
+            trafficCategories=req.trafficCategories.trim()
+            
+        }else{
+            trafficCategories=''
+        }
+
+        let overUsagePolicy
+        if(req.overUsagePolicy != null){ 
+            overUsagePolicy=req.overUsagePolicy.trim()
+            
+        }else{
+            overUsagePolicy=''
+        }
+
+        let description_en
+        if(req.description_en != null){ 
+            description_en=req.description_en.trim()
+            
+        }else{
+            description_en=''
+        }
+
+        let description_th
+        if(req.description_th != null){ 
+            description_th=req.description_th.trim()
+            
+        }else{
+            description_th=''
+        }
+
+        let coarseBalanceLevel
+        if(req.coarseBalanceLevel != null){ 
+            coarseBalanceLevel=req.coarseBalanceLevel.trim()
+            
+        }else{
+            coarseBalanceLevel=''
+        }
+
+        let title_en
+        if(req.title_en != null){ 
+            title_en=req.title_en.trim()
+            
+        }else{
+            title_en=''
+        }
+
+        let title_th
+        if(req.title_th != null){ 
+            title_th=req.title_th.trim()
+            
+        }else{
+            title_th=''
+        }
         await this.DBRepository.executeQuery(`UPDATE  TB_M_Push_Notify_Mapping set 
-        Event_id='${req.Event_id}',
-        moduleName_en='${req.moduleName_en}',
-        moduleName_th='${req.moduleName_th}',
-        trafficCategories='${req.trafficCategories}',
-        overUsagePolicy='${req.overUsagePolicy}',
-        description_en='${req.description_en}',
-        description_th='${req.description_th}',
-        coarseBalanceLevel='${req.coarseBalanceLevel}',
-        title_en='${req.title_en}',
-        title_th='${req.title_th}',
+        Event_id='${req.Event_id.trim()}',
+        moduleName_en='${moduleName_en}',
+        moduleName_th='${moduleName_th}',
+        trafficCategories='${trafficCategories}',
+        overUsagePolicy='${overUsagePolicy}',
+        description_en='${description_en}',
+        description_th='${description_th}',
+        coarseBalanceLevel='${coarseBalanceLevel}',
+        title_en='${title_en}',
+        title_th='${title_th}',
         cus_type='${req.cus_type}',
         update_dt=CURRENT_TIMESTAMP,
         update_by='${req.user}'

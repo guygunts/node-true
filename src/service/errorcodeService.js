@@ -47,8 +47,34 @@ class ErrorCode {
     }
 
     async errorcodeinsert (req){
-        await this.DBRepository.executeQuery(`INSERT INTO TB_M_Buypack_Error_Code (code,http_status_code,cause,error_message_th,error_message_en,sbm_error_desc,cus_type,create_dt,create_by) 
-        VALUES ('${req.code}','${req.http_status_code}','${req.cause}','${req.error_message_th}','${req.error_message_en}','${req.sbm_error_desc}','${req.cus_type}',CURRENT_TIMESTAMP,'${req.user}');`);  
+        let error_message_th
+        if(req.error_message_th != null){ 
+            error_message_th=req.error_message_th.trim()
+            
+        }else{
+            error_message_th=''
+        }
+
+        let error_message_en
+        if(req.error_message_en != null){ 
+            error_message_en=req.error_message_en.trim()
+            
+        }else{
+            error_message_en=''
+        }
+
+        let sbm_error_desc
+        if(req.sbm_error_desc != null){ 
+            sbm_error_desc=req.sbm_error_desc.trim()
+            
+        }else{
+            sbm_error_desc=''
+        }
+
+
+         await this.DBRepository.executeQuery(`INSERT INTO TB_M_Buypack_Error_Code (code,http_status_code,cause,error_message_th,error_message_en,sbm_error_desc,cus_type,create_dt,create_by)
+         VALUES ('${req.code}','${req.http_status_code}','${req.cause.trim()}','${error_message_th}','${error_message_en}','${sbm_error_desc}','${req.cus_type}',CURRENT_TIMESTAMP,'${req.user}');`);  
+        
         let resultJson = {
             "mess":'success'
         }
@@ -56,13 +82,36 @@ class ErrorCode {
     }
 
     async errorcodeupdate(req){
+        let error_message_th
+        if(req.error_message_th != null){ 
+            error_message_th=req.error_message_th.trim()
+            
+        }else{
+            error_message_th=''
+        }
+
+        let error_message_en
+        if(req.error_message_en != null){ 
+            error_message_en=req.error_message_en.trim()
+            
+        }else{
+            error_message_en=''
+        }
+
+        let sbm_error_desc
+        if(req.sbm_error_desc != null){ 
+            sbm_error_desc=req.sbm_error_desc.trim()
+            
+        }else{
+            sbm_error_desc=''
+        }
         await this.DBRepository.executeQuery(`UPDATE  TB_M_Buypack_Error_Code set 
         code='${req.code}',
         http_status_code='${req.http_status_code}',
-        cause='${req.cause}',
-        error_message_th='${req.error_message_th}',
-        error_message_en='${req.error_message_en}',
-        sbm_error_desc='${req.sbm_error_desc}',
+        cause='${req.cause.trim()}',
+        error_message_th='${error_message_th}',
+        error_message_en='${error_message_en}',
+        sbm_error_desc='${sbm_error_desc}',
         cus_type='${req.cus_type}',
         update_dt=CURRENT_TIMESTAMP,
         update_by='${req.user}'
