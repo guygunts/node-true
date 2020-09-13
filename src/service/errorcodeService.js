@@ -14,16 +14,25 @@ class ErrorCode {
     }
     async errorcodelist(){ 
         let columns=[]
-        let columnname="code,http_status_code,cause,error_message_th,error_message_en,sbm_error_desc,cus_type,"
-        let columndata="code,http_status_code,cause,error_message_th,error_message_en,sbm_error_desc,cus_type,"
-
+        let columnname="code,http_status_code,cause,error_message_th,error_message_en,sbm_error_desc,cus_type"
+        let columndata="code,http_status_code,cause,error_message_th,error_message_en,sbm_error_desc,cus_type"
+        let arraycolumnstyle=[]
        let arraycolumnname=columnname.split(',')
        let arraycolumndata=columndata.split(',')
-
+       for(let i=0; i<columnname.length; i++){ 
+        let datajson
+            
+            datajson ={
+                width:'250px'
+            }
+        
+        arraycolumnstyle.push(datajson)
+   }
         for (let e = 0; e < arraycolumnname.length; e++) {
             let items = {
                 'header':arraycolumnname[e],
-                'field': arraycolumndata[e]
+                'field':arraycolumndata[e],
+                'style':arraycolumnstyle[e]
             }
             columns.push(items)
         }
