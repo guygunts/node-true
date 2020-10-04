@@ -47,7 +47,35 @@ class ServiceTypeMapping {
     }
 
     async servicetypeupdate(req){
-        await this.DBRepository.executeQuery(`UPDATE  TB_M_Service_Type_Mapping set desc_th='${req.desc_th}', desc_en='${req.desc_en}', custom_traffic_category_th='${req.custom_traffic_category_th}',custom_traffic_category_en='${req.custom_traffic_category_en}', update_dt=CURRENT_TIMESTAMP, update_by='${req.user}' where code=${req.code};`)
+        let desc_th
+        if(req.desc_th != null){ 
+            desc_th=req.desc_th.trim()
+            
+        }else{
+            desc_th=''
+        }
+        let desc_en
+        if(req.desc_en != null){ 
+            desc_en=req.desc_en.trim()
+            
+        }else{
+            desc_en=''
+        }
+        let custom_traffic_category_th
+        if(req.custom_traffic_category_th != null){ 
+            custom_traffic_category_th=req.custom_traffic_category_th.trim()
+            
+        }else{
+            custom_traffic_category_th=''
+        }
+        let custom_traffic_category_en
+        if(req.custom_traffic_category_en != null){ 
+            custom_traffic_category_en=req.custom_traffic_category_en.trim()
+            
+        }else{
+            custom_traffic_category_en=''
+        }
+        await this.DBRepository.executeQuery(`UPDATE  TB_M_Service_Type_Mapping set desc_th='${desc_th}', desc_en='${desc_en}', custom_traffic_category_th='${custom_traffic_category_th}',custom_traffic_category_en='${custom_traffic_category_en}', update_dt=CURRENT_TIMESTAMP, update_by='${req.user}' where code=${req.code};`)
     }
 
     async servicetypedelete(req){ 

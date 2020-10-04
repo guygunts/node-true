@@ -37,7 +37,7 @@ class Priceplan {
             columns.push(items)
         }
 
-        let data=await this.DBRepository.executeQuery(`select code,description_th,description_en,module_name_th,module_name_en,desc_th,desc_en,custom_description_th,custom_description_en,start_dt,end_dt,offer_type,cost_type,price,company,cus_type from TB_M_Price_Plan `);
+        let data=await this.DBRepository.executeQuery(`select code,description_th,description_en,module_name_th,module_name_en,desc_th,desc_en,custom_description_th,custom_description_en,DATE_FORMAT(start_dt, "%Y-%m-%d %T") start_dt,DATE_FORMAT(end_dt, "%Y-%m-%d %T") end_dt,offer_type,cost_type,price,company,cus_type from TB_M_Price_Plan `);
 
         let resultJson = {
             "columnname":columns,
@@ -47,7 +47,35 @@ class Priceplan {
     }
 
     async priceplanupdate(req){
-        await this.DBRepository.executeQuery(`UPDATE  TB_M_Price_Plan set description_th='${req.description_th}', description_en='${req.description_en}', module_name_th='${req.module_name_th}',module_name_en='${req.module_name_en}', update_dt=CURRENT_TIMESTAMP, update_by='${req.user}' where code=${req.code};`)
+        let desc_th
+        if(req.desc_th != null){ 
+            desc_th=req.desc_th.trim()
+            
+        }else{
+            desc_th=''
+        }
+        let desc_en
+        if(req.desc_en != null){ 
+            desc_en=req.desc_en.trim()
+            
+        }else{
+            desc_en=''
+        }
+        let module_name_th
+        if(req.module_name_th != null){ 
+            module_name_th=req.module_name_th.trim()
+            
+        }else{
+            module_name_th=''
+        }
+        let module_name_en
+        if(req.module_name_en != null){ 
+            module_name_en=req.module_name_en.trim()
+            
+        }else{
+            module_name_en=''
+        }
+        await this.DBRepository.executeQuery(`UPDATE  TB_M_Price_Plan set desc_th='${desc_th}', desc_en='${desc_en}', module_name_th='${module_name_th}',module_name_en='${module_name_en}', update_dt=CURRENT_TIMESTAMP, update_by='${req.user}' where code='${req.code}'`)
     }
 
     async priceplandelete(req){ 
