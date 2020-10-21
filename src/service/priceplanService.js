@@ -75,7 +75,22 @@ class Priceplan {
         }else{
             module_name_en=''
         }
-        await this.DBRepository.executeQuery(`UPDATE  TB_M_Price_Plan set desc_th='${desc_th}', desc_en='${desc_en}', module_name_th='${module_name_th}',module_name_en='${module_name_en}', update_dt=CURRENT_TIMESTAMP, update_by='${req.user}' where code='${req.code}'`)
+
+        let custom_description_th
+        if(req.custom_description_th != null){ 
+            custom_description_th=req.custom_description_th.trim()
+            
+        }else{
+            custom_description_th=''
+        }
+        let custom_description_en
+        if(req.custom_description_en != null){ 
+            custom_description_en=req.custom_description_en.trim()
+            
+        }else{
+            custom_description_en=''
+        }
+        await this.DBRepository.executeQuery(`UPDATE  TB_M_Price_Plan set desc_th='${desc_th}', desc_en='${desc_en}', module_name_th='${module_name_th}',module_name_en='${module_name_en}', update_dt=CURRENT_TIMESTAMP, update_by='${req.user}',custom_description_en='${custom_description_en}',custom_description_th='${custom_description_th}' where code='${req.code}'`)
     }
 
     async priceplandelete(req){ 
